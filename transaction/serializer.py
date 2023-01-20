@@ -1,13 +1,22 @@
 from rest_framework import serializers
 from transaction.models import Transaction
-from item.models import ItemType
+from item.models import ItemType, Item
 from user.models import User
 
+from django.db.models.expressions import OuterRef
+from django.db.models.functions import Coalesce
+from django.db.models import Subquery
 from django.db.models import Sum
 
 class RevenueCategorySerializer(serializers.Serializer):
     item__type = serializers.ChoiceField(choices=ItemType.choices)
     revenue = serializers.IntegerField()
+    
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["category"] = data.pop("item__type", "")
+        data["revenue"] = data.pop("revenue", "")
+        return data
 
 class BestSpenderSerializer(serializers.Serializer):
     name = serializers.SerializerMethodField()
