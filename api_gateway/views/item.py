@@ -32,7 +32,10 @@ class ApiGatewayItemDetail(APIView):
     
     def get(self,request, uuid):
         return self.request_base('get', uuid=uuid)
-
+    
+    def delete(self,request, uuid):
+        return self.request_base('delete', uuid=uuid)
+    
     def put(self, request, uuid):
         data = {
             'name':request.data['name'],
@@ -40,3 +43,4 @@ class ApiGatewayItemDetail(APIView):
             'prices':request.data['prices']
         } 
         return self.request_base('put',uuid=uuid, data=data)
+ 
